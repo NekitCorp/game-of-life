@@ -9,7 +9,7 @@ export function populateRandom(rows: number, columns: number) {
 
     range(columns).forEach((_, i) => {
         range(rows).forEach((_, j) => {
-            if (Math.random() <= 0.5) return;
+            if (Math.random() <= 0.4) return;
             population[`${i}:${j}`] = createAgent(i, j);
         });
     });

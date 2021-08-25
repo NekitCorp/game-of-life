@@ -4,30 +4,30 @@ export class Drawer {
     private canvas: HTMLCanvasElement;
     private context: CanvasRenderingContext2D;
     private kernel: number;
-    private width: number;
-    private height: number;
-    private rows: number;
-    private columns: number;
+    private width = document.body.clientWidth;
+    private height = document.body.clientHeight;
+    public rows: number;
+    public columns: number;
 
     constructor(kernelSize: number) {
-        // Находим элемент:
+        // Находим элемент
         const canvas = document.getElementById("canvas") as HTMLCanvasElement;
         const context = canvas.getContext("2d") as CanvasRenderingContext2D;
-        const [width, height] = [canvas.offsetWidth, canvas.offsetHeight];
 
-        // Сохраняем ссылки на контекст и настройки:
+        // Растягиваем элемент на весь экран
+        canvas.width = this.width;
+        canvas.height = this.height;
+
+        // Сохраняем ссылки на контекст и настройки
         this.canvas = canvas;
         this.context = context;
         this.kernel = kernelSize;
 
-        this.width = width;
-        this.height = height;
+        // Рассчитываем количество колонок и рядов на поле
+        this.rows = Math.floor(this.height / this.kernel);
+        this.columns = Math.floor(this.width / this.kernel);
 
-        // Рассчитываем количество колонок и рядов на поле:
-        this.rows = Math.floor(height / this.kernel);
-        this.columns = Math.floor(width / this.kernel);
-
-        // Нормализуем отображение на экранах с высокой плотностью пикселей:
+        // Нормализуем отображение на экранах с высокой плотностью пикселей
         this.normalizeScale();
     }
 
@@ -44,18 +44,18 @@ export class Drawer {
     };
 
     drawGrid = () => {
-        this.context.strokeStyle = "rgba(0,0,0,0.3)";
+        this.context.strokeStyle = "rgba(0,0,0,0.7)";
 
-        // Вертикальные линии:
-        for (let i = 0; i < this.width + this.kernel; i += this.kernel) {
+        // Вертикальные линии
+        for (let i = 0; i < this.width; i += this.kernel) {
             this.context.beginPath();
             this.context.moveTo(i, 0);
             this.context.lineTo(i, this.height);
             this.context.stroke();
         }
 
-        // Горизонтальные линии:
-        for (let j = 0; j < this.height + this.kernel; j += this.kernel) {
+        // Горизонтальные линии
+        for (let j = 0; j < this.height; j += this.kernel) {
             this.context.beginPath();
             this.context.moveTo(0, j);
             this.context.lineTo(this.width, j);
